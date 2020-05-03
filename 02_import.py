@@ -45,6 +45,6 @@ class MongoDB(object):
         print(self.collection.count_documents({}))
 
 if __name__ == "__main__":
-    mongodb = MongoDB(dbName='Dataset', collectionName='Events')
+    mongodb = MongoDB(dbName='GDELT', collectionName='Events')
     mongodb.InsertData()
     

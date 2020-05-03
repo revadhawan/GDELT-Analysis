@@ -3,7 +3,7 @@ from pymongo import MongoClient
 client = MongoClient()
 client = MongoClient("mongodb://localhost:27017/")
 
-db = client.Dataset
+db = client.GDELT
 coll = db.Events
 
 # 1. Get total number of events
@@ -31,3 +31,5 @@ print(filt_one)
 filt = coll.find({"Year": "2019"})
 for filt_all in filt:
     print(filt_all)
+    
+
