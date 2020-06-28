@@ -10,17 +10,26 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client.GDELT
 coll = db.Events
 
-# Find all events
-cursor = coll.aggregate([ {'$match': {"Year": "2020"}}, { '$sample': { 'size': 1000000 }}], allowDiskUse= True )
+# FIND FILTERED EVENTS
+cursor = coll.aggregate([{ '$sample': { 'size': 1000000 }}], allowDiskUse= True )
 data = list(cursor)
 cursor.close()
 df = pd.DataFrame(data)
 
-# Group the events by month
+# 01. GET EVENTS GROUPED BY MONTH
 df.groupby('MonthYear')['_id'].nunique().plot(kind='bar')
 plt.title('NUMBER OF EVENTS PER MONTH')
 plt.ylabel('Number of events')
 plt.xlabel('Month')
 show()
+
+# 02. EVOLUTION OF EVENTS DENSITY
+df['SQLDATE'] = pd.to_datetime(df['SQLDATE'])
+df.groupby(pd.Grouper(key='SQLDATE',freq='W'))['_id'].nunique().plot.bar()
+plt.title('EVOLUTION OF EVENTS DENSITY')
+plt.ylabel('Number of events')
+plt.xlabel('Month')
+show()
+
 
 

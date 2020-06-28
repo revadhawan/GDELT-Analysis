@@ -10,10 +10,7 @@ except Exception as e:
     print("Some modules are missing")
     
 # 01. FIELD NAMES FILE
-fieldnames = pd.read_excel('CSV.header.fieldids.xlsx', sheet_name='Sheet1',
-                           index_col='Column ID')['Field Name']
-
-#
+fieldnames = pd.read_excel('CSV.header.fieldids.xlsx', sheet_name='Sheet1', index_col='Column ID')['Field Name']
 
 path = '/Users/Reva/Desktop/DATASET/tmp/MARCH'
 files = glob.glob(path + "/*.csv")

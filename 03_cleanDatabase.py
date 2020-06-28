@@ -10,11 +10,10 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client.GDELT
 coll = db.Events
 
-# 01. Cleaning the unwanted documents
-coll.delete_many({ 'Year': { '$nin': [ '2019', '2020'] } })
-coll.delete_many({ 'MonthYear': '201909' })
+# 01.CLEANING THE UNWANTED DOCUMENTS
+coll.delete_many({ 'Year': { '$nin': [ '2020'] } })
 
-# 02. Cleaning the unwanted fields
+# 02. CLEANING THE UNWANTED FIELDS
 """ coll.update_many({}, {'$unset': {'FractionDate':1, 
                                        'Actor1EthnicCode':1,
                                        'Actor1Religion1Code':1,

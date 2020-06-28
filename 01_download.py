@@ -9,15 +9,15 @@ from urllib.parse import urlparse
 from multiprocessing.pool import ThreadPool
 from timeit import default_timer as timer
 
-# 1. DEFINING DATA RANGE OF FILES WANTED USING PANDAS
+# 01. DEFINING DATA RANGE OF FILES WANTED USING PANDAS
 dateRange = pd.date_range(start='2020-01-01',end='2020-03-31', freq='1D').tolist()
 print("Crawling data from", dateRange[0].strftime('%Y-%m-%d'), "to", dateRange[-1].strftime('%Y-%m-%d'))
 
-# 2. DEFINE GDELT URL AND LOCAL FOLDER URL
+# 02. DEFINE GDELT URL AND LOCAL FOLDER URL
 gdelturl = "http://data.gdeltproject.org/events/%s.export.CSV.zip"
 both_urls = [((gdelturl % ts.strftime('%Y%m%d')), "/Users/Reva/Desktop/DATASET/") for ts in dateRange]
 
-# 3. FUNCTION TO MATCH THE URL AND THE FOLDER URL (LOCAL STORAGE)
+# 03. FUNCTION TO MATCH THE URL AND THE FOLDER URL (LOCAL STORAGE)
 def crawl_url(urlFolder):
     url = urlFolder[0]
     folder = urlFolder[1]
@@ -35,7 +35,7 @@ def crawl_url(urlFolder):
         return url, None, e
 
 
-# 4. FUNCTION TO DOWNLOAD AND EXTRACT THE FILES
+# 04. FUNCTION TO DOWNLOAD AND EXTRACT THE FILES
 def download_files(both_urls):
     print("Downloading and extracting", len(both_urls), "documents")
     

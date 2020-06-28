@@ -10,39 +10,31 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client.GDELT
 coll = db.Events
 
-# Find all events
-allevents = coll.find(no_cursor_timeout=True).limit(10)
-allevents = coll.aggregate([{ '$sample': { 'size': 1000000 }}], allowDiskUse= True )
-alldata = list(allevents)
-allevents.close()
-alldf = pd.DataFrame(alldata)
-
-
-# Find by the year wanted
-# events = coll.find({"Year": "2020"}, no_cursor_timeout=True).limit(3000000)
-events = coll.aggregate([ {'$match': {"Year": "2020"}}, { '$sample': { 'size': 1000000 }}], allowDiskUse= True )
+# FIND ALL EVENTS
+# events = coll.find(no_cursor_timeout=True).limit(3000000)
+events = coll.aggregate([{ '$sample': { 'size': 1000000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
 
 
-# Number of kind of events
-alldf.groupby('EventRootCode')['_id'].nunique().plot(kind='bar')
+# 01. NUMBER OF EVENTS GROUPED BY THEIR KIND
+df.groupby('EventRootCode')['_id'].nunique().plot(kind='bar')
 plt.title('TOTAL KIND OF EVENTS')
 plt.ylabel('Number of occurrences')
 plt.xlabel('Event code')
 show()
 
-# # Top 5 kind of events
-sums = alldf.groupby('EventRootCode')['_id'].nunique().nlargest(5)
-pie(sums, labels=sums.index)
+# 02. TOP 5 KIND OF EVENTS WITH MOST FREQUENCY
+sums = df.groupby('EventRootCode')['_id'].nunique().nlargest(5)
+pie(sums, labels=sums.index, autopct='%1.1f%%')
 axis('equal')
 plt.title('TOP KIND OF EVENTS')
 plt.ylabel('Number of occurrences')
 plt.xlabel('Event code')
 show()
 
-# Number of kind of events / month
+# 03. NUMBER EVENTS BY THEIR KIND PER MONTH
 df.groupby(['MonthYear','EventRootCode'])['_id'].nunique().unstack('MonthYear').plot.bar()
 plt.title('KIND OF EVENTS PER MONTH')
 plt.ylabel('Number of occurrences')
