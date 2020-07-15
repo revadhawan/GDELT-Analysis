@@ -12,7 +12,7 @@ except Exception as e:
 # 01. FIELD NAMES FILE
 fieldnames = pd.read_excel('CSV.header.fieldids.xlsx', sheet_name='Sheet1', index_col='Column ID')['Field Name']
 
-path = '/Users/Reva/Desktop/DATASET/tmp/MARCH'
+path = '/Users/Reva/Desktop/DATASET02/tmp/JUNE'
 files = glob.glob(path + "/*.csv")
 print(files)
 

@@ -28,13 +28,10 @@ coll = db.Events
 
 # FIND EVENTS
 # events = coll.find({'MonthYear': '202001' }, no_cursor_timeout=True).limit(1000)
-events = coll.aggregate([{'$match': {'MonthYear': '202004'}},{'$sample': { 'size': 100000 }}], allowDiskUse= True )
+events = coll.aggregate([{'$match': {'MonthYear': '202001'}},{'$sample': { 'size': 100000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
-
-# Remove rows with NaN values
-df.dropna(subset = ["GoldsteinScale"], inplace=True)
 
 # MEASURES (INPUTS)
 v1 = pd.to_numeric(df['GoldsteinScale']).values
@@ -58,41 +55,40 @@ colors=["m.", "r.", "c.", "y.", "b."]
 # print(X)
 
 # SEPARATING VALUES FOR DIFFERENT CLUSTERS
-# def groupby(X, labels):
-#     sidx = labels.argsort(kind='mergesort')
-#     X_sorted = X[sidx]
-#     labels_sorted = labels[sidx]
+def groupby(X, labels):
+    sidx = labels.argsort(kind='mergesort')
+    X_sorted = X[sidx]
+    labels_sorted = labels[sidx]
     
-#     cut_idx = np.flatnonzero(np.r_[True, labels_sorted[1:] != labels_sorted[:-1], True])
+    cut_idx = np.flatnonzero(np.r_[True, labels_sorted[1:] != labels_sorted[:-1], True])
     
-#     out = [X_sorted[i:j] for i,j in zip(cut_idx[:-1],cut_idx[1:])]
-#     return out
+    out = [X_sorted[i:j] for i,j in zip(cut_idx[:-1],cut_idx[1:])]
+    return out
 
-# result = groupby(X, labels)
+result = groupby(X, labels)
 
-# for cluster in result:
-#     for i in range(len(cluster)):
-#         sums = cluster[i][0] + cluster[i][1]
+for cluster in result:
+    for i in range(len(cluster)):
+        sums = cluster[i][0] + cluster[i][1]
 
-#     print('Max values:', max(cluster, key=lambda x: x[0] + x[1] ))
-#     print('Min values:', min(cluster, key=lambda x: x[0] + x[1] ))
-#     print('Standard Deviation for x:', (stdev(cluster[:,0])))
-#     print('Standard Deviation for y:', (stdev(cluster[:,1])))
+    print('Max values:', max(cluster, key=lambda x: x[0] + x[1] ))
+    print('Min values:', min(cluster, key=lambda x: x[0] + x[1] ))
+    print('Standard Deviation for x:', (stdev(cluster[:,0])))
+    print('Standard Deviation for y:', (stdev(cluster1[:,1])))
 
 
-# for i in range(len(X)):
-#     # print("Coordenate: ", X[i], "Label: ", labels[i])
-#     plt.plot(X[i][0], X[i][1], colors[labels[i]], markersize=10)
-# plt.scatter(centroids[:,0], centroids[:,1], marker='x', s=150, linewidths=5, zorder=10)
-# # dend = sch.dendrogram(sch.linkage(X, method='ward'))
-# plt.xlabel('Goldstein Scale')
-# plt.ylabel('AvgTone')
-# plt.title('Clustering')
-# plt.show()
+for i in range(len(X)):
+    # print("Coordenate: ", X[i], "Label: ", labels[i])
+    plt.plot(X[i][0], X[i][1], colors[labels[i]], markersize=10)
+plt.scatter(centroids[:,0], centroids[:,1], marker='x', s=150, linewidths=5, zorder=10)
+# dend = sch.dendrogram(sch.linkage(X, method='ward'))
+plt.xlabel('Goldstein Scale')
+plt.ylabel('AvgTone')
+plt.title('Clustering')
+plt.show()
 
 # AVERAGE VALUE
-print('Mean x:', np.mean(x1))
-print('Mean y:', np.mean(x2))
+print('Mean:', np.mean(x1))
 
 # CENTROIDS VALUES
 print("Centroids:", centroids)

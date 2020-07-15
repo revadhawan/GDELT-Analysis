@@ -10,12 +10,12 @@ from multiprocessing.pool import ThreadPool
 from timeit import default_timer as timer
 
 # 01. DEFINING DATA RANGE OF FILES WANTED USING PANDAS
-dateRange = pd.date_range(start='2020-01-01',end='2020-03-31', freq='1D').tolist()
+dateRange = pd.date_range(start='2020-04-01',end='2020-06-30', freq='1D').tolist()
 print("Crawling data from", dateRange[0].strftime('%Y-%m-%d'), "to", dateRange[-1].strftime('%Y-%m-%d'))
 
 # 02. DEFINE GDELT URL AND LOCAL FOLDER URL
 gdelturl = "http://data.gdeltproject.org/events/%s.export.CSV.zip"
-both_urls = [((gdelturl % ts.strftime('%Y%m%d')), "/Users/Reva/Desktop/DATASET/") for ts in dateRange]
+both_urls = [((gdelturl % ts.strftime('%Y%m%d')), "/Users/Reva/Desktop/DATASET02/") for ts in dateRange]
 
 # 03. FUNCTION TO MATCH THE URL AND THE FOLDER URL (LOCAL STORAGE)
 def crawl_url(urlFolder):
@@ -47,7 +47,7 @@ def download_files(both_urls):
         if error is None:
             # Extracting the files in a same folder
             z = zipfile.ZipFile(file=local_url, mode='r')
-            z.extractall(path='/Users/Reva/Desktop/DATASET/'+'tmp/')
+            z.extractall(path='/Users/Reva/Desktop/DATASET02/'+'tmp/')
             print("%r ✔️ %.2fs" % (local_url, timer() - start))
           
         else:

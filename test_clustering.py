@@ -1,9 +1,7 @@
-import pandas as pd
-from scipy import stats
-from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
+#Import libraries
 import numpy as np
-import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
 
 from pymongo import MongoClient
 from matplotlib.pyplot import pie, axis, show
@@ -20,25 +18,23 @@ db = client.GDELT
 coll = db.Events
 
 # FIND ALL EVENTS
-# events = coll.find(no_cursor_timeout=True).limit(3000000)
-events = coll.aggregate([{'$sample': { 'size': 1000 }}], allowDiskUse= True )
+events = coll.aggregate([{'$match': {'MonthYear': '202001'}}, {'$sample': { 'size': 100000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
-df = df[df['ActionGeo_CountryCode'].notna()]
-print(df['ActionGeo_CountryCode'].count())
-print(df['GoldsteinScale'].count())
+
 
 # K-MEANS
+ 
+# Variables
+x = pd.to_numeric(df['EventRootCode']).values
+y = pd.to_numeric(df['GoldsteinScale']).values
 
-v1 = pd.Categorical(df['ActionGeo_CountryCode']).codes
-x1 = np.array(v1)
+# print('Mean value for AvgTone:', pd.to_numeric(df['AvgTone'], errors='coerce').mean())
+info= df[['GoldsteinScale', 'EventRootCode']].to_numpy()
 
-v2 = pd.to_numeric(df['GoldsteinScale']).values
-x2 = np.array(v2)
-
-X = np.array(list(zip(x1, x2)))
-
+X = np.array(list(zip(x,y)))
+# print(X)
 
 kmeans = KMeans(n_clusters=3)
 kmeans = kmeans.fit(X)
@@ -46,7 +42,6 @@ labels = kmeans.predict(X)
 centroids = kmeans.cluster_centers_
 
 colors=["m.", "r.", "c.", "y.", "b."]
-
 
 for i in range(len(X)):
     # print("Coordenate: ", X[i], "Label: ", labels[i])
