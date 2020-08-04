@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from pymongo import MongoClient
 from matplotlib.pyplot import pie, axis, show
@@ -12,10 +13,15 @@ coll = db.Events
 
 # FIND ALL EVENTS
 # cursor = coll.find({'timestamp': {'$gte': 'start', '$lte': 'end'}}, no_cursor_timeout=True)
-cursor = coll.aggregate([{ '$sample': { 'size': 100000 }}], allowDiskUse= True )
+cursor = coll.aggregate([{ '$sample': { 'size': 600000 }}], allowDiskUse= True )
 data = list(cursor)
 cursor.close()
 df = pd.DataFrame(data)
+df = df.replace('null', np.nan, regex=True)
+
+# Remove rows with NaN values
+df = df[df['Actor1CountryCode'].notna()]
+print(df['Actor1CountryCode'])
 
 # ACTOR 1
 
@@ -28,8 +34,8 @@ plt.ylabel('Number of events')
 plt.xlabel('Country code')
 show()
 
-# 02. TOP 10 FREQUENT COUNTRIES PER MONTH
-df.groupby(['MonthYear','Actor1CountryCode'])['_id'].nunique().nlargest(15).unstack('Actor1CountryCode').plot.bar()
+# # 02. TOP 10 FREQUENT COUNTRIES PER MONTH
+df.groupby(['MonthYear','Actor1CountryCode'])['_id'].nunique().nlargest(25).unstack('Actor1CountryCode').plot.bar()
 plt.title('TOP COUNTRIES PER MONTH FOR ACTOR 1')
 plt.ylabel('Number of occurrences')
 plt.xlabel('Country code')

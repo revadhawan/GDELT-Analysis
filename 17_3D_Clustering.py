@@ -21,10 +21,11 @@ coll = db.Events
 
 # FIND ALL EVENTS
 # events = coll.find(no_cursor_timeout=True).limit(3000000)
-events = coll.aggregate([{'$sample': { 'size': 100000 }}], allowDiskUse= True )
+events = coll.aggregate([{'$sample': { 'size': 2000000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
+df = df.replace('null', np.nan, regex=True)
 df = df[df['GoldsteinScale'].notna()]
 print(df['EventRootCode'].count())
 print(df['GoldsteinScale'].count())
@@ -33,9 +34,7 @@ print(df['AvgTone'].count())
 # K-MEANS
 v1 = pd.to_numeric(df['EventRootCode']).values
 v2 = pd.to_numeric(df['GoldsteinScale']).values
-# v3 = pd.to_numeric(df['AvgTone']).values
-v3 = pd.to_numeric(df['NumMentions']).values
-
+v3 = pd.to_numeric(df['AvgTone']).values
 
 x1 = np.array(v1)
 x2 = np.array(v2)
@@ -56,6 +55,6 @@ ax.scatter(X[:, 0], X[:, 1], X[:, 2],
           c=labels.astype(np.float), edgecolor="k", s=50)
 ax.set_xlabel("Event Root Code")
 ax.set_ylabel("Goldstein Scale")
-ax.set_zlabel("Num mentions")
+ax.set_zlabel("Average Tone")
 plt.title("K Means", fontsize=14)
 show() 

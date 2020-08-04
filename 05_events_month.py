@@ -11,7 +11,7 @@ db = client.GDELT
 coll = db.Events
 
 # FIND FILTERED EVENTS
-cursor = coll.aggregate([{ '$sample': { 'size': 1000000 }}], allowDiskUse= True )
+cursor = coll.aggregate([{ '$sample': { 'size': 3000000 }}], allowDiskUse= True )
 data = list(cursor)
 cursor.close()
 df = pd.DataFrame(data)
@@ -25,7 +25,7 @@ show()
 
 # 02. EVOLUTION OF EVENTS DENSITY
 df['SQLDATE'] = pd.to_datetime(df['SQLDATE'])
-df.groupby(pd.Grouper(key='SQLDATE',freq='W'))['_id'].nunique().plot.bar()
+df.groupby(pd.Grouper(key='SQLDATE',freq='W'))['_id'].nunique().plot()
 plt.title('EVOLUTION OF EVENTS DENSITY')
 plt.ylabel('Number of events')
 plt.xlabel('Month')

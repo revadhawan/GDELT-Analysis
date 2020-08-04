@@ -1,4 +1,6 @@
 from pymongo import MongoClient
+import pandas as pd
+import numpy as np
 
 client = MongoClient()
 client = MongoClient("mongodb://localhost:27017/")
@@ -10,11 +12,23 @@ coll = db.Events
 number_of_events = coll.count_documents({})
 print(number_of_events)
 
-# 02. GET LIMITED DOCUMENTS
-all_data = coll.find().limit(2)
-for events in all_data:
+# 02. GET TOTAL NUMBER OF DOCUMENTS FILTERING THEM
+events = coll.find({'MonthYear': '202001'}, no_cursor_timeout=True).limit(2)
+data = list(events)
+events.close()
+df = pd.DataFrame(data)
+df = df.replace('null', np.nan, regex=True)
+df = df[df['ActionGeo_CountryCode'].notna()]
+df = df[df['GoldsteinScale'].notna()]
+for events in df:
    number_of_events = coll.count_documents({})
    print(number_of_events)
+
+# 02. GET LIMITED DOCUMENTS
+# all_data = coll.find().limit(2)
+# for events in all_data:
+#    number_of_events = coll.count_documents({})
+#    print(number_of_events)
 
 # # 03. GET THE FIRST EVENT FOUND
 # one_event = coll.find_one()

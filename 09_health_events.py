@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from pymongo import MongoClient
 from matplotlib.pyplot import pie, axis, show
@@ -11,14 +12,15 @@ db = client.GDELT
 coll = db.Events
 
 # FIND FILTERED EVENTS
-events = coll.aggregate([ {'$match': {"Actor1Type1Code": "HLH"}}, { '$sample': { 'size': 10000000 }}], allowDiskUse= True )
+events = coll.aggregate([ {'$match': {"Actor1Type1Code": "HLH"}}, { '$sample': { 'size': 1000000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
+df = df.replace('null', np.nan, regex=True)
 
 # 01. EVOLUTION OF HEALTH EVENTS DENSITY
 df['SQLDATE'] = pd.to_datetime(df['SQLDATE'])
-df.groupby(pd.Grouper(key='SQLDATE',freq='W'))['_id'].nunique().plot()
+df.groupby(pd.Grouper(key='SQLDATE',freq='W'))['_id'].nunique().plot(figsize=(10, 20))
 plt.title('EVOLUTION OF EVENTS RELATED TO HEALTH')
 plt.ylabel('Number of occurrences')
 plt.xlabel('Weeks')

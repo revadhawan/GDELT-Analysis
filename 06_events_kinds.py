@@ -11,8 +11,8 @@ db = client.GDELT
 coll = db.Events
 
 # FIND ALL EVENTS
-# events = coll.find(no_cursor_timeout=True).limit(3000000)
-events = coll.aggregate([{ '$sample': { 'size': 1000000 }}], allowDiskUse= True )
+# events = coll.find(no_cursor_timeout=True)
+events = coll.aggregate([{ '$sample': { 'size': 3000000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
