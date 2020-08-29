@@ -1,5 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import socket
 import errno  
 
@@ -13,7 +12,7 @@ db = client.GDELT
 coll = db.Events
 
 # FIND EVENTS
-events = coll.find({'MonthYear': '202001'}, no_cursor_timeout=True).limit(100000)
+events = coll.find(no_cursor_timeout=True).limit(100000)
 # events = coll.aggregate([{'$match': {'MonthYear': '202001'}},{'$sample': { 'size': 100}}], allowDiskUse= True )
 data = list(events)
 events.close()
