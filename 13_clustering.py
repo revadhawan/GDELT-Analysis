@@ -23,7 +23,7 @@ coll = db.Events
 
 # FIND EVENTS
 # events = coll.find({'MonthYear': '202001' }, no_cursor_timeout=True)
-events = coll.aggregate([{'$match': {'MonthYear': '202006'}},{'$sample': { 'size': 300000}}], allowDiskUse= True )
+events = coll.aggregate([{'$match': {'MonthYear': '202001'}},{'$sample': { 'size': 300000}}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
@@ -95,7 +95,7 @@ for i in range(len(X)):
     plt.plot(X[i][0], X[i][1], colors[labels[i]], markersize=10)
 plt.scatter(centroids[:,0], centroids[:,1], marker='x', s=20, linewidths=5, zorder=10, color='k')
 plt.xlabel('Kind of event')
-plt.ylabel('Goldstein Scale')
+plt.ylabel('Average tone')
 # plt.title('Clustering')
 plt.show()
 

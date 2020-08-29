@@ -13,13 +13,22 @@ number_of_events = coll.count_documents({})
 print(number_of_events)
 
 # 02. GET TOTAL NUMBER OF DOCUMENTS FILTERING THEM
-events = coll.find({'MonthYear': '202001'}, no_cursor_timeout=True).limit(2)
+# events = coll.find({'MonthYear': '202001'}, no_cursor_timeout=True).limit(2)
+events = coll.aggregate([{'$match': {'ActionGeo_CountryCode': { '$in': ['US','SP','CH','BR','IN','IT','UK','RS','TU','PL'] }}}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
 df = df.replace('null', np.nan, regex=True)
-df = df[df['ActionGeo_CountryCode'].notna()]
-df = df[df['GoldsteinScale'].notna()]
+
+count = df.groupby('ActionGeo_CountryCode')['_id'].count()
+x1 = list(df.groupby('ActionGeo_CountryCode').groups.keys())
+total=sum(count)
+print(total)
+
+
+
+
+
 for events in df:
    number_of_events = coll.count_documents({})
    print(number_of_events)

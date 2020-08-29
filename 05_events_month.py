@@ -11,10 +11,13 @@ db = client.GDELT
 coll = db.Events
 
 # FIND FILTERED EVENTS
-cursor = coll.aggregate([{ '$sample': { 'size': 3000000 }}], allowDiskUse= True )
+cursor = coll.aggregate([{ '$sample': { 'size': 30 }}], allowDiskUse= True )
 data = list(cursor)
 cursor.close()
 df = pd.DataFrame(data)
+
+df['country_code'] = df['ActionGeo_CountryCode'].values
+print(df['country_code'])
 
 # 01. GET EVENTS GROUPED BY MONTH
 df.groupby('MonthYear')['_id'].nunique().plot(kind='bar')

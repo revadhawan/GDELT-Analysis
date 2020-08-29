@@ -23,24 +23,10 @@ coll = db.Events
 
 # FIND EVENTS
 # events = coll.find({'MonthYear': '202001' }, no_cursor_timeout=True)
-events = coll.aggregate([{'$match': {'ActionGeo_CountryCode': { '$in': ['US','ES','CN','BR','IN','IT','GB','RS','TU','PL'] }}}, {'$sample': { 'size': 100 }}], allowDiskUse= True )
+events = coll.aggregate([{'$match': {'ActionGeo_CountryCode': { '$in': ['UK'] }}}, {'$sample': { 'size': 1000000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
 df = df[df['ActionGeo_CountryCode'].notna()]
 
-# K-MEANS
-df['CountryCode'] = pd.Categorical(df['ActionGeo_CountryCode']).codes
-v1 = pd.Categorical(df['ActionGeo_CountryCode']).codes
-print(df[['CountryCode', 'ActionGeo_CountryCode']])
-x = pd.to_numeric(df['GoldsteinScale']).values
-y = pd.to_numeric(df['AvgTone']).values
-
-countries = ['US','ES','CN','BR','IN','IT','GB','RS','TU','PL']
-
-fig, ax = plt.subplots(figsize=(8,6))
-
-for i in range(len(v1)):
-    ax.scatter(x = x, y = y, c = v1, label=countries, cmap='tab20b')
-plt.legend()
-plt.show()
+print(df)

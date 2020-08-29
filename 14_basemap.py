@@ -24,7 +24,7 @@ db = client.GDELT
 coll = db.Events
 
 # FIND ALL EVENTS
-events = coll.aggregate([{'$match': {'ActionGeo_CountryCode': { '$in': ['US','ES','CN','BZ','IN','IT','GB','RU','TR','PL'] }}}, {'$sample': { 'size': 800000 }}], allowDiskUse= True )
+events = coll.aggregate([{'$sample': { 'size': 200000 }}], allowDiskUse= True )
 data = list(events)
 events.close()
 df = pd.DataFrame(data)
@@ -49,10 +49,18 @@ long_y = pd.to_numeric(df['ActionGeo_Lat'], errors='coerce').tolist()
 
 
 # 01.GOLDSTEIN SCALE
-goldstein = pd.to_numeric(df['GoldsteinScale']).tolist()
-m.scatter(lat_x, long_y, latlon=True, c=goldstein, s=2, cmap='RdYlGn')
+# goldstein = pd.to_numeric(df['GoldsteinScale']).tolist()
+# m.scatter(lat_x, long_y, latlon=True, c=goldstein, s=2, cmap='RdYlGn')
+# bar = m.colorbar()
+# bar.ax.set_title('Goldstein Scale')
+
+# GOLDSTEIN SCALE AVERAGE
+df['GoldsteinScale'] = df['GoldsteinScale'].astype(float)
+y = list(df.groupby('ActionGeo_CountryCode')['GoldsteinScale'].mean())
+m.scatter(lat_x, long_y, latlon=True, c=y, s=2, cmap='RdYlGn')
 bar = m.colorbar()
 bar.ax.set_title('Goldstein Scale')
+
 
 # # 02. AVERAGE TONE
 # avgtone = pd.to_numeric(df['AvgTone']).tolist()
@@ -61,11 +69,11 @@ bar.ax.set_title('Goldstein Scale')
 # bar.ax.set_title('Average Tone')
 
 
-# # 03. EVENT ROOT CODE
-# event = pd.to_numeric(df['EventRootCode']).tolist()
-# m.scatter(lat_x, long_y, latlon=True, c=event, s=2, cmap='RdYlGn')
-# bar = m.colorbar()
-# bar.ax.set_title('Event Root Code')
+# 03. EVENT ROOT CODE
+event = pd.to_numeric(df['EventRootCode']).tolist()
+m.scatter(lat_x, long_y, latlon=True, c=event, s=2, cmap='RdYlGn')
+bar = m.colorbar()
+bar.ax.set_title('Event Root Code')
 
 
 # 03. NUMBER OF MENTIONS

@@ -46,7 +46,11 @@ coll.update_many({}, {'$unset': {'FractionDate':1,
                                        'Actor2Type1Code':1,
                                        'Actor1Geo_Type':1,
                                        'Actor2Geo_Type':1,
-                                       'ActionGeo_Type':1,                                                                             
+                                       'ActionGeo_Type':1,
+                                       'NumMentions':1,
+                                       'ActionGeo_FullName':1,
+                                       'Actor1Geo_FullName':1,
+                                       'Actor2Geo_FullName':1,                                                                        
                                        }})
 
 print('Done')
