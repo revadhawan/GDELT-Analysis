@@ -1,25 +1,23 @@
-# Import libraries
+import os
+
+import conda
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from mpl_toolkits.basemap import Basemap
 from pymongo import MongoClient
-import pandas as pd
-import matplotlib.pyplot as plt
-import conda
-import os
 
 conda_file_dir = conda.__file__
 conda_dir = conda_file_dir.split('lib')[0]
 proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
 os.environ["PROJ_LIB"] = proj_lib
 
-os.environ["PROJ_LIB"] = "D:\\Anaconda\Library\share"  # fixr
-
+os.environ["PROJ_LIB"] = "D:\\Anaconda\Library\share"
 
 fig = plt.figure(figsize=(12, 9))
 
 client = MongoClient()
 client = MongoClient("mongodb://localhost:27017/")
-
 db = client.GDELT
 coll = db.Events
 

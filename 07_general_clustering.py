@@ -1,15 +1,13 @@
-# importing frations as parameter values
 from fractions import Fraction as fr
-# importing the statistics module
 from statistics import stdev
 
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.cluster.hierarchy as sch
 import seaborn as sb
 from matplotlib.pyplot import axis, pie, show
+from mpl_toolkits.mplot3d import Axes3D
 from pymongo import MongoClient
 from scipy import stats
 from scipy.cluster.hierarchy import dendrogram, linkage
@@ -74,6 +72,8 @@ colors = ["m.", "r.", "c.", "y.", "b."]
 
 # K-MEANS CLUSTERING
 # 05. SEPARATING VALUES FOR DIFFERENT CLUSTERS
+
+
 def groupby(X, labels):
     sidx = labels.argsort(kind='mergesort')
     X_sorted = X[sidx]
@@ -85,6 +85,7 @@ def groupby(X, labels):
     out = [X_sorted[i:j] for i, j in zip(cut_idx[:-1], cut_idx[1:])]
     return out
 
+
 result = groupby(X, labels)
 
 # 06. CALCULATIONS FOR EACH CLUSTER
@@ -94,7 +95,7 @@ for cluster in result:
 
     # 2 dimensions
     # print('Min values:', min(cluster, key=lambda x: x[0] + x[1]))
-    # print('Max values:', max(cluster, key=lambda x: x[0] + x[1]))    
+    # print('Max values:', max(cluster, key=lambda x: x[0] + x[1]))
     # print('Standard Deviation for x:', (stdev(cluster[:, 0])))
     # print('Standard Deviation for y:', (stdev(cluster[:, 1])))
 
