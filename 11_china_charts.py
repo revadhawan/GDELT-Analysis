@@ -1,9 +1,8 @@
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
-from pymongo import MongoClient
+import pandas as pd
 from matplotlib.pyplot import show
+from pymongo import MongoClient
 
 client = MongoClient()
 client = MongoClient("mongodb://localhost:27017/")

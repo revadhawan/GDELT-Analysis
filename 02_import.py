@@ -1,10 +1,7 @@
-try:
-    import pymongo
-    from pymongo import MongoClient
-    import pandas as pd
-    import glob
-except Exception as e:
-    print("Some modules are missing")
+import glob
+import pandas as pd
+import pymongo
+from pymongo import MongoClient
 
 # 01. FIELD NAMES FILE (COLUMN NAMES)
 fieldnames = pd.read_excel('CSV.header.fieldids.xlsx',

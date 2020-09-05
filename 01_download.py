@@ -1,12 +1,12 @@
 import os.path
+import re
 import zipfile
-
-import pandas as pd
-
-from urllib.request import urlretrieve
-from urllib.parse import urlparse
 from multiprocessing.pool import ThreadPool
 from timeit import default_timer as timer
+from urllib.parse import urlparse
+from urllib.request import urlretrieve
+
+import pandas as pd
 
 # 01. DEFINE DATA RANGE OF FILES WANTED USING PANDAS
 dateRange = pd.date_range(
@@ -21,7 +21,7 @@ both_urls = [((gdelturl % ts.strftime('%Y%m%d')),
 
 # 03. FUNCTION TO MATCH WEB URL WITH LOCAL URL (LOCAL STORAGE)
 def crawl_url(urlFolder):
-    url = urlFolder[0]
+    url = urlFolder[0] 
     folder = urlFolder[1]
 
     # Use the URL as the name of the file
